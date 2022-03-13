@@ -3,6 +3,10 @@
   margin-bottom: auto;
 }
 
+.menu-search-form.menu-search-form-expandable {
+  display: flex;
+}
+
 .menu-search-form.menu-search-form-expandable.is-collapsed input[name=s] {
   max-width: 0;
   padding-left: 0;
@@ -22,14 +26,20 @@
   display: flex;
   align-items: center;
   transition: margin-left 0.25s ease-in;
+  cursor: pointer;
 }
 
 .menu-search-form.menu-search-form-expandable a.menu-search-submit {
   margin-left: 1rem;
 }
 
-.menu-search-form.menu-search-form-expandable.is-collapsed .menu-search-submit {
+.menu-search-form.menu-search-form-expandable.is-collapsed a.menu-search-submit {
   margin-left: 0;
+}
+
+.menu-search-form.menu-search-form-expandable a.menu-search-submit,
+.menu-search-form.menu-search-form-expandable.is-collapsed a.menu-search-submit {
+  padding: 0;
 }
 
 .menu-search-submit:hover,
