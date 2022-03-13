@@ -1,0 +1,22 @@
+.menu-searchform input[name=s] {
+  background: transparent;
+  border-color: currentColor;
+  border-top: 0;
+  border-right: 0;
+  border-left: 0;
+  border-radius: 0;
+  padding-left: 0;
+  padding-right: 0;
+  color: inherit;
+}
+
+.menu-searchform input[name=s]:focus {
+  outline: 0;
+  box-shadow: none;
+}
+
+.menu-searchform input[type=submit],
+.menu-searchform button[type=submit] {
+  background: transparent;
+  border-color: transparent;
+}

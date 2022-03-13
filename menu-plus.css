@@ -1,0 +1,21 @@
+.menu-plus-settings-panel {
+  transition: max-height 0.35s ease-out;
+}
+
+input[data-toggle=menu-plus-settings-panel]:not(:checked) ~ .menu-plus-settings-panel {
+  max-height: 0;
+  overflow: hidden;
+}
+
+input[data-toggle=menu-plus-settings-panel]:checked ~ .menu-plus-settings-panel {
+  max-height: 200px;
+  overflow: visible;
+}
+
+.menu-plus-settings-panel-body {
+  padding: 8px;
+}
+
+.menu-plus-settings-panel-body .wp-picker-holder {
+  position: absolute;
+}
