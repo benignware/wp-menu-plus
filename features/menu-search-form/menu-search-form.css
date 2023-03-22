@@ -46,3 +46,23 @@
 [data-menu-button].wp-block-button .wp-block-button__link:hover {
   text-decoration: initial;
 }
+
+.menu-search-form input[type="search"].is-style-outline {
+  background: transparent;
+  color: currentColor;
+}
+
+.menu-search-form input[type="search"].is-style-underline {
+  background: transparent;
+  color: currentColor;
+  border-top: 0;
+  border-right: 0;
+  border-left: 0;
+  padding-left: 0;
+  padding-right: 0;
+  border-radius: 0;
+}
+
+.menu-search-form input[type="search"].is-style-underline:focus {
+  outline: none;
+}

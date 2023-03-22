@@ -9,8 +9,13 @@
  License: MIT
 */
 
-require_once('features/menu-search-form/menu-search-form.php');
+require 'lib/agnosticon/agnosticon.php';
+
+require_once('features/menu-icon/menu-icon.php');
 require_once('features/menu-button/menu-button.php');
+require_once('features/menu-search-form/menu-search-form.php');
+
+
 
 add_action('admin_enqueue_scripts', function() {
 	wp_enqueue_style( 'wp-color-picker' );

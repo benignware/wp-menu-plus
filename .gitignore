@@ -1,19 +1,29 @@
-# Eclipse
-.settings
-.project
-
-# GFM Preview
-.README.md.html
-
 # Mac OS
 .DS_Store
 
-# Composer
+# Node
+node_modules
+**/node_modules
+npm-debug.log
+
+# PHP
+vendor
 composer.phar
 
-# Build
+# Temp Dir
 tmp
-dist
+temp
 
-# Vendor
-vendor
+# Env Files
+.env-*
+.env
+!.env-sample
+
+# Wordpress
+wp-config-*
+wp-config
+!wp-config-docker.php
+.plugins
+.mu-plugins
+.uploads
+.themes

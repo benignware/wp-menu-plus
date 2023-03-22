@@ -23,8 +23,6 @@
       const isSubmit = !!submitTarget;
       const isSubmitLink = submitTarget && submitTarget.nodeName.toLowerCase() === 'a';
 
-      console.log('isSubmit: ', isSubmit, isSubmitLink);
-
       if (searchForm) {
         const { expandable } = WPMenuSearchForm.getOptions(searchForm);
 

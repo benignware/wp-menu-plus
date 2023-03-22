@@ -23,174 +23,12 @@ function menu_plus_get_common_ancestor($node_a, $node_b) {
   return null;
 }
 
-function menu_plus_render_button($attrs = []) {
-  $attrs = array_merge([
-    'url' => null,
-    'text' => '',
-    'className' => ''
-  ]);
-
-  $template = $attrs['url']
-    ? <<<EOT
-      <div class="wp-block-button %className">
-        <a class="wp-block-button__link button" href="%url">
-          %text
-        </a>
-      </div>
-    EOT
-    : <<<EOT
-      <div class="wp-block-button %className">
-        %text
-      </div>
-    EOT;
-
-	// Block Markup
-  $html = strtr($template, [
-    '%className' => $attrs['className'],
-    '%url' => $attrs['url'],
-    '%text' => $attrs['text']
-  ]);
-
-  $block = [
-    'blockName' => 'core/button',
-    'attrs' => $attrs,
-    'innerHTML' => $html,
-    'innerContent' => [$html]
-  ];
-
-  $html = (new WP_Block( $block ))->render();
-
-  return $html;
-};
-
 function menu_plus_get_search_form($options = []) {
-  $html = get_search_form(false);
+  $html = menu_plus_render_search_block($options);
+  // $html = get_search_form(false);
 
   return $html;
-
-  $doc = new DOMDocument();
-  @$doc->loadHTML('<?xml encoding="utf-8" ?>' . $html );
-
-  $xpath = new DOMXpath($doc);
-
-  $input = $xpath->query('//input[@name="s"]')->item(0);
-  // Replace submit input with button
-  $submit = $xpath->query('//input[@type="submit"]')->item(0);
-
-  if ($submit) {
-    $button = $doc->createElement('button');
-    $button->textContent = $submit->getAttribute('value');
-    $button->setAttribute('class', $submit->getAttribute('class'));
-    $submit->parentNode->insertBefore($button, $submit);
-    $submit->parentNode->removeChild($submit);
-
-    $submit = $button;
-  }
-
-  $form = $xpath->query('//form')->item(0);
-  
-	$common_ancestor = menu_plus_get_common_ancestor($input, $submit);
-
-  if ($common_ancestor == $form) {
-    $wrapper = $doc->createElement('div');
-    $children = [];
-
-    foreach ($common_ancestor->childNodes as $child) {
-      if (
-        $child === $submit
-        || menu_plus_contains_node($child, $submit)
-        || $child === $input
-        || menu_plus_contains_node($child, $input)
-      ) {
-        $children[] = $child;
-      }
-    }
-
-    if (count($children) > 0) {
-      $common_ancestor->insertBefore($wrapper, $children[0]);
-
-      foreach ($children as $child) {
-        $wrapper->appendChild($child);
-      }
-    }
-  } else {
-    $wrapper = $common_ancestor;
-  }
-
-  $wrapper->setAttribute('class', 'form-group');
-
-  $block_types = WP_Block_Type_Registry::get_instance()->get_all_registered();
-
-  $classes = array_unique(array_filter(explode(' ', $form->getAttribute('class'))));
-  $classes[] = 'wp-block-search__button-outside';
-  $classes[] = 'wp-block-search__text-button';
-  $classes[] = 'wp-block-search';
-  $form->setAttribute('class', implode(' ', $classes));
-
-  if ($label) {
-    $label_classes = array_unique(array_filter(explode(' ', $label->getAttribute('class'))));
-    $label_classes[] = 'wp-block-search__label';
-  }
-
-  $wrapper_classes = array_unique(array_filter(explode(' ', $wrapper->getAttribute('class'))));
-  $wrapper_classes[] = 'menu-search-wrapper';
-  $wrapper_classes[] = 'wp-block-search__inside-wrapper';
-  $wrapper->setAttribute('class', implode(' ', $wrapper_classes));
-
-  $input_classes = array_unique(array_filter(explode(' ', $input->getAttribute('class'))));
-  $input_classes[] = 'menu-search-input';
-  $input_classes[] = 'wp-block-search__input';
-  $input->setAttribute('class', implode(' ', $input_classes));
-
-  $submit_classes = array_unique(array_filter(explode(' ', $submit->getAttribute('class'))));
-  $submit_classes[] = 'menu-search-submit';
-  $submit_classes[] = 'wp-block-search__button';
-  $submit->setAttribute('class', implode(' ', $submit_classes));
-
-  if (isset($block_types['core/search'])) {
-    $html = preg_replace('~(?:<\?[^>]*>|<(?:!DOCTYPE|/?(?:html|head|body))[^>]*>)\s*~i', '', $doc->saveHTML());
-
-    $block = [
-      'blockName' => 'core/search',
-      'attrs' => [],
-      'innerHTML' => $html,
-      'innerContent' => [$html]
-    ];
-
-    $html = (new WP_Block( $block ))->render();
-    
-    $doc = new DOMDocument();
-    @$doc->loadHTML('<?xml encoding="utf-8" ?>' . $html );
-    $xpath = new DOMXpath($doc);
-  }
-
-  $input = $xpath->query('//input[@name="s"]')->item(0);
-  $input_id = $input->getAttribute('id');
-
-  $placeholder = $input->getAttribute('placeholder');
-
-  $label = $input_id
-    ? $xpath->query(sprintf('//label[@for="%s"]', $input_id))->item(0)
-    : null;
-
-  if ($label) {
-    if (!$placeholder) {
-      $placeholder = $label->textContent;
-    }
-
-    $label->parentNode->removeChild($label);
-  }
-
-  $input->setAttribute('placeholder', $placeholder);
-  $input->setAttribute('class', implode(' ', $input_classes));
-
-  $submit = $xpath->query('//button')->item(0);
-  $submit->setAttribute('class', implode(' ', $submit_classes));
-
-  $html = preg_replace('~(?:<\?[^>]*>|<(?:!DOCTYPE|/?(?:html|head|body))[^>]*>)\s*~i', '', $doc->saveHTML());
-
-  return $html;
-};
+}
 
 add_action('admin_init', 'menu_item_search_form_nav_menu_meta_box');
 
@@ -233,9 +71,6 @@ function menu_item_search_form_display_menu_custom_box() {
 }
 
 add_action( 'wp_nav_menu_item_custom_fields', function( $item_id, $item ) {
-  $menu_item_search_form_expandable = get_post_meta( $item_id, '_menu_item_search_form_expandable', true );
-  $menu_item_search_form_button = get_post_meta( $item_id, '_menu_item_search_form_button', true );
-
   // if (!metadata_exists('post', $item_id, '_menu_item_search_form_button')) {
   //   $menu_item_search_form_button = '1';
   // }
@@ -243,6 +78,16 @@ add_action( 'wp_nav_menu_item_custom_fields', function( $item_id, $item ) {
   if ($item->type !== 'search-form') {
     return;
   }
+
+  $menu_item_search_form_expandable = get_post_meta( $item_id, '_menu_item_search_form_expandable', true );
+  $menu_item_search_form_button = get_post_meta( $item_id, '_menu_item_search_form_button', true );
+  $menu_plus_input_style = get_post_meta( $item_id, '_menu_plus_input_style', true );
+
+  $input_styles = [
+    'solid' => 'Solid',
+    'outline' => 'Outline',
+    'underline' => 'Underline'
+  ];
 
   ?>
 	<div style="clear: both;">
@@ -252,32 +97,54 @@ add_action( 'wp_nav_menu_item_custom_fields', function( $item_id, $item ) {
       <?= _e('Search Form') ?>
     </div>
     <div class="menu-plus-settings-panel">
-      <div class="menu-plus-settings-field-group">
-        <input
-          type="checkbox"
-          name="menu_item_search_form_expandable[<?php echo $item_id ;?>]"
-          id="menu-item-search-form-expandable-<?php echo $item_id ;?>"
-          value="1"
-          <?php if (esc_attr( $menu_item_search_form_expandable ) === '1'): ?> checked<?php endif; ?>
-        />
-        <label
-          for="menu-item-search-form-expandable-<?php echo $item_id ;?>"
-          class="label"><?php _e( "Expandable", 'menu-plus' ); ?>
-        </label>
-      </div>
-    </div>
-    <div class="menu-plus-settings-field-group">
-        <input
-          type="checkbox"
-          name="menu_item_search_form_button[<?php echo $item_id ;?>]"
-          id="menu-item-search-form-button-<?php echo $item_id ;?>"
-          value="1"
-          <?php if (esc_attr( $menu_item_search_form_button ) === '1'): ?> checked<?php endif; ?>
-        />
-        <label
-          for="menu-item-search-form-button-<?php echo $item_id ;?>"
-          class="label"><?php _e( "Button", 'menu-plus' ); ?>
-        </label>
+      <div class="menu-plus-settings-body">
+        <div class="menu-plus-settings-field-group">
+          <input
+            type="checkbox"
+            name="menu_item_search_form_expandable[<?php echo $item_id ;?>]"
+            id="menu-item-search-form-expandable-<?php echo $item_id ;?>"
+            value="1"
+            <?php if (esc_attr( $menu_item_search_form_expandable ) === '1'): ?> checked<?php endif; ?>
+          />
+          <label
+            for="menu-item-search-form-expandable-<?php echo $item_id ;?>"
+            class="label"><?php _e( "Expandable", 'menu-plus' ); ?>
+          </label>
+        </div>
+        <div class="menu-plus-settings-field-group">
+          <input
+            type="checkbox"
+            name="menu_item_search_form_button[<?php echo $item_id ;?>]"
+            id="menu-item-search-form-button-<?php echo $item_id ;?>"
+            value="1"
+            <?php if (esc_attr( $menu_item_search_form_button ) === '1'): ?> checked<?php endif; ?>
+          />
+          <label
+            for="menu-item-search-form-button-<?php echo $item_id ;?>"
+            class="label"><?php _e( "Button", 'menu-plus' ); ?>
+          </label>
+        </div>
+        <!-- Style -->
+				<div class="menu-plus-settings-field-group">
+					<label
+            for="menu-plus-input-style<?php echo $item_id ;?>"
+            class="menu-plus-label"><?php _e( "Input Style", 'menu-plus' ); ?>
+          </label><br />
+				
+					<select
+            name="menu_plus_input_style[<?php echo $item_id ;?>]"
+            id="menu-plus-input-style<?php echo $item_id ;?>"
+          >
+            <?php foreach ($input_styles as $style => $label): ?>
+              <option
+                value="<?= $style ?>"
+                <?php if (esc_attr( $menu_plus_input_style ) === $style ): ?>selected<?php endif; ?>
+              >
+                <?= $label ?>
+              </option>
+            <?php endforeach; ?>
+          </select>
+				</div>
       </div>
     </div>
   </div>
@@ -299,6 +166,13 @@ add_action( 'wp_update_nav_menu_item', function( $menu_id, $menu_item_db_id ) {
 	} else {
 		delete_post_meta( $menu_item_db_id, '_menu_item_search_form_button' );
 	}
+
+  if ( isset( $_POST['menu_plus_input_style'][$menu_item_db_id]  ) ) {
+		$sanitized_data = sanitize_text_field( $_POST['menu_plus_input_style'][$menu_item_db_id] );
+		update_post_meta( $menu_item_db_id, '_menu_plus_input_style', $sanitized_data );
+	} else {
+		delete_post_meta( $menu_item_db_id, '_menu_plus_input_style' );
+	}
 }, 10, 2 );
 
 add_filter( 'nav_menu_link_attributes', function( $atts, $item, $args ) {
@@ -309,7 +183,8 @@ add_filter( 'nav_menu_link_attributes', function( $atts, $item, $args ) {
     $menu_item_search_form_options = [
       'title' => $item->title,
       'expandable' => empty($menu_item_search_form_expandable) || $menu_item_search_form_expandable === '0' ? false : true,
-      'button' => empty($menu_item_search_form_button) || $menu_item_search_form_button === '0' ? false : true
+      'button' => empty($menu_item_search_form_button) || $menu_item_search_form_button === '0' ? false : true,
+      'input_style' => get_post_meta( $item->ID, '_menu_plus_input_style', true ) ?: 'solid'
     ];
 
 		$atts = array_merge($atts, [
@@ -357,6 +232,10 @@ add_filter( 'wp_nav_menu', function($nav_menu = '', $args = array()) {
 
     $wrapper = $content_doc_xpath->query('/html/body/*')->item(0);
 
+    // if (!$wrapper) {
+    //   return '';
+    // }
+
     $wrapper = $doc->importNode($wrapper, true);
 
     $form = $wrapper->cloneNode(true);
@@ -386,8 +265,40 @@ add_filter( 'wp_nav_menu', function($nav_menu = '', $args = array()) {
     }
 
     $element->parentNode->insertBefore($form, $element);
-    $button = $doc_xpath->query('//button', $form)->item(0);
-    $input = $doc_xpath->query('//input[@name="s"]', $form)->item(0);
+    $button = $doc_xpath->query('.//button|.//input[@type = "submit"]', $form)->item(0);
+    $input = $doc_xpath->query('.//input[@name="s"]', $form)->item(0);
+
+    $input_classes = explode(' ', $input->getAttribute('class'));
+
+    if ($options->input_style) {
+      $input_classes[] = 'menu-plus-input is-style-' . $options->input_style;
+    }
+
+    $input_class = implode(' ', array_values(array_filter(array_unique($input_classes))));
+
+    $input->setAttribute('class', $input_class);
+
+    $input_id = $input->getAttribute('id');
+
+    $placeholder = $input->getAttribute('placeholder');
+
+    $label = $input_id
+      ? $doc_xpath->query(sprintf('.//label[@for="%s"]', $input_id), $form)->item(0)
+      : null;
+
+    if ($label) {
+      if (!$placeholder) {
+        $placeholder = $label->textContent;
+      }
+
+      if (menu_plus_contains_node($label, $input)) {
+        $label->parentNode->insertBefore($input, $label);
+      }
+
+      $label->parentNode->removeChild($label);
+    }
+
+    $input->setAttribute('placeholder', $placeholder);
 
     if ($button) {
       $button->textContent = '';
@@ -432,6 +343,74 @@ add_filter( 'wp_nav_menu', function($nav_menu = '', $args = array()) {
   return $nav_menu;
 });
 
+function menu_plus_render_search_block() {
+  global $__menu_plus_search_incr;
+
+  if (!isset($__menu_plus_search_incr)) {
+    $__menu_plus_search_incr = 0;
+  } else {
+    $__menu_plus_search_incr++;
+  }
+
+  // $has_block_widgets = apply_filters( 'use_widgets_block_editor', get_theme_support( 'widgets-block-editor' ) );
+  $has_block_widgets = wp_use_widgets_block_editor();
+
+  // $has_block_widgets = false;
+  $block_types = WP_Block_Type_Registry::get_instance()->get_all_registered();
+
+	if ($has_block_widgets && isset($block_types['core/search'])) {
+
+    $input_id = "menu-plus-search-form-$__menu_plus_search_incr";
+    $label = __('Search');
+    $url = get_site_url();
+
+    // Block Markup
+    $html = strtr(<<<EOT
+      <form
+        role="search"
+        method="get"
+        action="%url"
+        class="wp-block-search__button-outside wp-block-search__text-button wp-block-search"
+      >
+        <label for="%input-id" class="wp-block-search__label">%label</label>
+        <div class="wp-block-search__inside-wrapper">
+          <input
+            type="search"
+            id="%input-id"
+            class="wp-block-search__input"
+            name="s"
+            value=""
+            placeholder=""
+            required=""
+          >
+          <button type="submit" class="wp-block-search__button ">%label</button>
+        </div>
+      </form>
+    EOT, [
+      '%input_id' => $input_id,
+      '%url' => $url,
+      '%label' => $label
+    ]);
+
+    $block = [
+      'blockName' => 'core/search',
+      'attrs' => [],
+      'innerHTML' => $html,
+      'innerContent' => [$html]
+    ];
+
+    $html = (new WP_Block( $block ))->render();
+
+    return $html;
+  }
+
+  $html = get_search_form(false);
+
+  // echo '<textarea>' . $html . '</textarea>';
+
+  return $html;
+}
+
 // Enqueue scripts
 add_action('wp_enqueue_scripts', function() {
   wp_register_style('menu-search-form', plugin_dir_url( __FILE__ ) . 'menu-search-form.css', [], '1.0');
@@ -440,3 +419,30 @@ add_action('wp_enqueue_scripts', function() {
   wp_register_script('menu-search-form', plugin_dir_url( __FILE__ ) . 'menu-search-form.js', [], '1.0', true);
   wp_enqueue_script('menu-search-form');
 }, 1);
+
+// add_filter( 'nav_menu_item_title', function($title, $item) {
+//   if ( is_object( $item ) && $item->type === 'search-form' ) {
+//     return "<span data-menu-plus-menu-item-title=\"\">$title</span>";
+//   }
+
+//   return $title;
+// }, 10, 2);
+
+// add_filter('render_block', function($html, $block) {
+//   if ($block['blockName'] === 'core/search') {
+//     echo $block['blockName'];
+//     echo '<pre>';
+//     var_dump($block);
+//     echo '</pre>';
+//   }
+  
+//   return $html;
+// }, 10, 2);
+
+// add_action('after_setup_theme', function($bool) {
+//   $has_block_widgets = apply_filters( 'use_widgets_block_editor', false );
+//   $has_block_widgets = wp_use_widgets_block_editor();
+
+//   echo '-->' . $has_block_widgets;
+//   exit;
+// }, 2000);

@@ -42,7 +42,21 @@
   },
   "require-dev": {
     "wptrt/theme-unit-test": "dev-master",
-    "wpackagist-plugin/menu-image": ">=3.0.5"
+    "wpackagist-plugin/block-manager": ">=1.2.4",
+    "wpackagist-plugin/classic-editor": "*",
+    "wpackagist-plugin/classic-menu-block": "*",
+    "wpackagist-plugin/classic-widgets": "*",
+    "wpackagist-plugin/menu-image": ">=3.0.5",
+    "wpackagist-plugin/disable-gutenberg": ">=2.8.1",
+    "wpackagist-plugin/font-awesome": ">=4.3.2",
+    "wpackagist-plugin/frontend-dashicons": ">=1.0.2",
+    "wpackagist-plugin/wp-ionic-icons": ">=2.1",
+    "wpackagist-plugin/icon-fonts": ">=1.0.0",
+    "wpackagist-plugin/wp-fontallic-easypromoweb": ">=1.2",
+    "wpackagist-theme/twentyseventeen": ">=2.9",
+    "wpackagist-theme/twentytwentyone": "*",
+    "wpackagist-theme/twentytwentytwo": "*",
+    "wpackagist-theme/twentytwentythree": "*"
   },
   "extra": {
     "webroot-dir": "wp-core",

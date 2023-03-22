@@ -1,12 +1,12 @@
 <?php
 
+function menu_plus_has_block_support() {
+	return apply_filters( 'use_block_editor_for_post_type', true, 'post' );
+
+	// return apply_filters( 'use_widgets_block_editor', '__return_true' );
+}
+
 add_action( 'wp_nav_menu_item_custom_fields', function( $item_id, $item ) {
-	$block_types = WP_Block_Type_Registry::get_instance()->get_all_registered();
-
-	if (!isset($block_types['core/button'])) {
-		return;
-	}
-
 	if ($item->type === 'search-form') {
 		return;
 	}
@@ -37,7 +37,7 @@ add_action( 'wp_nav_menu_item_custom_fields', function( $item_id, $item ) {
 			<div class="menu-plus-settings-panel-body">
 				<!-- Background Color -->
 				<div style="clear: both;">
-					<label class="button-background-color"><?php _e( "Background Color", 'menu-item-button' ); ?></label><br />
+					<label class="button-background-color"><?php _e( "Button Background Color", 'menu-item-button' ); ?></label><br />
 					<div class="logged-input-holder">
 						<input
 							type="text"
@@ -51,7 +51,7 @@ add_action( 'wp_nav_menu_item_custom_fields', function( $item_id, $item ) {
 		
 				<!-- Style -->
 				<div style="clear: both;">
-					<label class="button-style"><?php _e( "Style", 'menu-item-button' ); ?></label><br />
+					<label class="button-style"><?php _e( "Button Style", 'menu-item-button' ); ?></label><br />
 				
 					<div class="logged-input-holder">
 						<select
@@ -120,6 +120,74 @@ add_filter( 'nav_menu_link_attributes', function( $atts, $item, $args ) {
 	return $atts;
 }, 10, 3 );
 
+function menu_plus_render_button($text, $url = null, $options = null) {
+	$options = $options ?: new stdClass();
+	$has_block_editor = use_block_editor_for_post_type('post');
+	$block_types = WP_Block_Type_Registry::get_instance()->get_all_registered();
+
+	if ($has_block_editor && isset($block_types['core/button'])) {
+		$style = isset($options->style) ? $options->style : 'fill';
+
+		// Block Markup
+		$html = strtr(<<<EOT
+		<a class="wp-block-button is-style-%style" href="%url" style="margin: 0">
+			<span class="wp-block-button__link button" style="white-space: normal; margin: 0">
+				%text
+			</span>
+		</a>
+		EOT, [
+			'%style' => $style,
+			'%url' => $url,
+			'%text' => $text
+		]);
+
+		$block = [
+			'blockName' => 'core/button',
+			'attrs' => array_merge([
+				'text' => $text,
+				'url' => $url,
+				'className' => "is-style-$style"
+			], isset($options->background_color) ? [
+				'backgroundColor' => $options->background_color,
+			] : []),
+			'innerHTML' => $html,
+			'innerContent' => [$html]
+		];
+
+		$html = (new WP_Block( $block ))->render();
+
+		return $html;
+	}
+
+	// According to https://www.searchenginepeople.com/blog/onclick.html Google is actually indexing inline JS links
+	$html = strtr(<<<EOT
+		<button onclick="location.href='%url'" class="button">
+			<span style="white-space: normal; margin: 0">
+				%text
+			</span>
+		</button>
+		EOT, [
+			'%style' => $style,
+			'%url' => $url,
+			'%text' => $text
+		]);
+	
+	// Works as well
+	$html = strtr(<<<EOT
+		<a href="%url" class="button" style="margin: 0">
+			<button style="white-space: normal; margin: 0">
+				%text
+			</button>
+		</a>
+	EOT, [
+		'%style' => $style,
+		'%url' => $url,
+		'%text' => $text
+	]);
+
+	return $html;
+}
+
 add_filter( 'wp_nav_menu', function($nav_menu = '', $args = array()) {
 	// Parse menu dom
   $doc = new DOMDocument();
@@ -145,34 +213,14 @@ add_filter( 'wp_nav_menu', function($nav_menu = '', $args = array()) {
 			continue;
 		}
 
-		$text = $element->textContent;
+		$text = '';
+
+		foreach ($element->childNodes as $child) {
+			$text.= preg_replace('~(?:<\?[^>]*>|<(?:!DOCTYPE|/?(?:html|head|body))[^>]*>)\s*~i', '', $doc->saveHTML($child));
+		}
 
 		// Block Markup
-		$html = strtr(<<<EOT
-		<div class="wp-block-button is-style-%style">
-			<a class="wp-block-button__link button" href="%url">
-				%text
-			</a>
-		</div>
-		EOT, [
-			'%style' => $options->style,
-			'%url' => $url,
-			'%text' => $text
-		]);
-
-		$block = [
-			'blockName' => 'core/button',
-			'attrs' => [
-				'text' => $text,
-				'url' => $url,
-				'backgroundColor' => $options->background_color,
-				'className' => "is-style-$options->style"
-			],
-			'innerHTML' => $html,
-			'innerContent' => [$html]
-		];
-
-		$html = (new WP_Block( $block ))->render();
+		$html = menu_plus_render_button($text, $url, $options);
 
 		// Parse button dom
 		$button_doc = new DOMDocument();
@@ -213,4 +261,4 @@ add_filter( 'wp_nav_menu', function($nav_menu = '', $args = array()) {
 	$nav_menu = preg_replace('~(?:<\?[^>]*>|<(?:!DOCTYPE|/?(?:html|head|body))[^>]*>)\s*~i', '', $doc->saveHTML());
 
   return $nav_menu;
-}, 12);
+}, 10);
