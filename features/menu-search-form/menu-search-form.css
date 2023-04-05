@@ -47,12 +47,13 @@
   text-decoration: initial;
 }
 
-.menu-search-form input[type="search"].is-style-outline {
+
+.menu-search-form input[name="s"].is-style-outline {
   background: transparent;
   color: currentColor;
 }
 
-.menu-search-form input[type="search"].is-style-underline {
+.menu-search-form input[name="s"].is-style-underline {
   background: transparent;
   color: currentColor;
   border-top: 0;
@@ -63,6 +64,8 @@
   border-radius: 0;
 }
 
-.menu-search-form input[type="search"].is-style-underline:focus {
+.menu-search-form input[name="s"].is-style-underline:focus {
   outline: none;
+  box-shadow: none;
+  border-color: initial;
 }
