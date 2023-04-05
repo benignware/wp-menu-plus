@@ -120,6 +120,7 @@ function _agnosticon_parse_resources($resources) {
         }
 
         $id = trim(substr($selector, 0, strlen($selector) - 7));
+        $id = trim($id, ':');
         $icons[$id] = (object) [
           'id' => $id,
           'char' => $char,

@@ -136,3 +136,11 @@ add_filter( 'nav_menu_item_title', function($title, $item) {
 
   return $title;
 }, 10, 2);
+
+
+add_action('init', function() {
+	wp_enqueue_style(
+		'menu-plus-icon',
+		plugins_url( 'menu-icon.css', __FILE__ )
+	);
+});

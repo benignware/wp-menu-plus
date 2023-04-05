@@ -23,7 +23,7 @@ function ja_global_enqueues() {
   
   wp_enqueue_style(
 		'menu-plus-icon-search',
-		plugins_url( 'menu-icon.css', __FILE__ )
+		plugins_url( 'menu-icon-search.css', __FILE__ )
 	);
 
 	wp_enqueue_script(

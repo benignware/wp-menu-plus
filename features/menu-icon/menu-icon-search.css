@@ -1,0 +1,62 @@
+.menu-plus-icon-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+input.menu-plus-icon-input[type=text] {
+  flex-grow: 1;
+}
+
+.menu-plus-icon-input-prepend,
+.menu-plus-icon-input-append {
+  position: absolute;
+  height: 100%;
+  display: none;
+  align-items: center;
+  font-size: 1rem;
+}
+
+.menu-plus-icon-input-prepend {
+  left: 8px;
+  width: 22px;
+  justify-content: center;
+}
+
+.menu-plus-icon-input-clear {
+  cursor: pointer;
+}
+
+.menu-plus-icon-input-append {
+  right: 8px;
+}
+
+input.menu-plus-icon-input[type=text]:not([data-value=""]) ~ .menu-plus-icon-input-prepend,
+input.menu-plus-icon-input[type=text]:not([data-value=""]) ~ .menu-plus-icon-input-append {
+  display: flex;
+}
+
+input.menu-plus-icon-input[type=text]:not([data-value=""]) {
+  padding-left: 32px;
+  padding-right: 72px;
+}
+
+input.menu-plus-icon-input.is-invalid {
+  color: red;
+}
+
+input.menu-plus-icon-input.is-invalid  ~ .menu-plus-icon-input-prepend .menu-plus-icon-input-icon {
+  color: red;
+}
+
+input.menu-plus-icon-input-hide-title {
+  position: absolute;
+  width: 0;
+  height: 0;
+  visibility: hidden;
+}
+
+input.menu-plus-icon-input-hide-title:checked ~ label {
+  text-decoration: line-through;
+}
+
