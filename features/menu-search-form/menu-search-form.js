@@ -25,20 +25,21 @@
 
       if (searchForm) {
         const { expandable } = WPMenuSearchForm.getOptions(searchForm);
+        const input = searchForm.querySelector('input[name=s]');
 
         if (expandable) {
           const isCollapsed = searchForm.classList.contains(IS_COLLAPSED);
 
           if (isCollapsed) {
-            const input = searchForm.querySelector('input[name=s]');
-
             input.focus();
             event.preventDefault();
             event.stopImmediatePropagation();
             searchForm.classList.remove(IS_COLLAPSED);
-          } else if (isSubmit && isSubmitLink) {
+          } else if (input.value && isSubmit && isSubmitLink) {
             searchForm.submit();
             event.preventDefault();
+          } else {
+            searchForm.classList.add(IS_COLLAPSED);
           }
         }
       }
