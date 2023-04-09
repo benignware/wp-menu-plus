@@ -125,11 +125,13 @@ add_filter( 'nav_menu_item_title', function($title, $item) {
     $icon_id = get_post_meta( $item->ID, '_menu_item_icon_id', true );
 
     if ($icon_id) {
-      $icon = get_agnosticon($icon_id);
+      $icon = get_agnosticon($icon_id, [
+				'class' => 'menu-item-icon'
+			]);
 
       if ($icon) {
 				$hide_title = get_post_meta( $item->ID, '_menu_item_icon_hide_title', true );
-        $title = $icon . ($hide_title ? '' : '&nbsp;' . $title);
+        $title = $icon . '&nbsp;' . sprintf('<span class="menu-item-title"%s>%s</span>', $hide_title ? ' hidden' : '', $title);
       }
     }
   }
