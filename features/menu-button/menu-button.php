@@ -127,7 +127,7 @@ add_filter( 'nav_menu_link_attributes', function( $atts, $item, $args ) {
 function menu_plus_render_button($text, $url = null, $options = null) {
 	$options = $options ?: new stdClass();
 	$has_block_editor = use_block_editor_for_post_type('post');
-	$block_types = WP_Block_Type_Registry::get_instance()->get_all_registered();
+	$block_types = $has_block_editor ? WP_Block_Type_Registry::get_instance()->get_all_registered() : null;
 
 	if ($has_block_editor && isset($block_types['core/button'])) {
 		$style = isset($options->style) ? $options->style : 'fill';
