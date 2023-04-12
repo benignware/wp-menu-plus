@@ -103,6 +103,17 @@ add_action( 'wp_update_nav_menu_item', function( $menu_id, $menu_item_db_id ) {
 		delete_post_meta( $menu_item_db_id, '_menu_item_icon_id' );
 	}
 
+	if ( isset( $_POST['menu_item_icon_id'][$menu_item_db_id]  ) ) {
+		$id = sanitize_text_field( $_POST['menu_item_icon_id'][$menu_item_db_id] );
+		$icon = get_agnosticon_data($id);
+
+		if ($icon) {
+			update_post_meta( $menu_item_db_id, '_menu_item_icon_class', $icon->class );
+		} else {
+			delete_post_meta( $menu_item_db_id, '_menu_item_icon_class' );
+		}
+	}
+
 	if ( isset( $_POST['menu_item_icon_hide_title'][$menu_item_db_id]  ) ) {
 		$sanitized_data = filter_var($_POST['menu_item_icon_hide_title'][$menu_item_db_id], FILTER_SANITIZE_NUMBER_INT);
 		update_post_meta( $menu_item_db_id, '_menu_item_icon_hide_title', $sanitized_data );
@@ -122,17 +133,20 @@ add_action( 'enqueue_block_editor_assets', function() {
 add_filter( 'nav_menu_item_title', function($title, $item) {
   if ( is_object( $item ) && isset( $item->ID ) ) {
     $icon_id = get_post_meta( $item->ID, '_menu_item_icon_id', true );
+		$icon_class = get_post_meta( $item->ID, '_menu_item_icon_class', true );
 
-    if ($icon_id) {
-      $icon = get_agnosticon($icon_id, [
+		if ($icon_class) {
+			$icon_html = "<i class=\"$icon_class\"></i>";
+		} else if ($icon_id) {
+      $icon_html = get_agnosticon($icon_id, [
 				'class' => 'menu-item-icon'
 			]);
-
-      if ($icon) {
-				$hide_title = get_post_meta( $item->ID, '_menu_item_icon_hide_title', true );
-        $title = $icon . '&nbsp;' . sprintf('<span class="menu-item-title"%s>%s</span>', $hide_title ? ' hidden' : '', $title);
-      }
     }
+
+		if ($icon_html) {
+			$hide_title = get_post_meta( $item->ID, '_menu_item_icon_hide_title', true );
+			$title = $icon_html . '&nbsp;' . sprintf('<span class="menu-item-title"%s>%s</span>', $hide_title ? ' hidden' : '', $title);
+		}
   }
 
   return $title;

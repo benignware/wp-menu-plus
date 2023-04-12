@@ -447,7 +447,7 @@ function _agnosticon_load() {
   ];
 }
 
-function get_agnosticon($id, $attrs = []) {
+function get_agnosticon_data($id) {
   global $__agnosticon__;
 
   _agnosticon_load();
@@ -456,31 +456,44 @@ function get_agnosticon($id, $attrs = []) {
     return '';
   }
 
-  $is_admin = is_admin();
   $icons = $__agnosticon__->icons;
 
   if (isset($icons[$id])) {
     $icon = $icons[$id];
 
-    if ($is_admin) {
-      $attrs = array_merge($attrs, [
-        'style' => isset($attrs['style']) ? $attrs['style'] . '; ' . $icon->style : $icon->style,
-      ]);
-    } else {
-      $attrs = array_merge($attrs, [
-        'class' => isset($attrs['class']) ? $attrs['class'] . ' ' . $icon->class : $icon->class,
-      ]);
-    }
+    return $icon;
+  }
 
-    $attrs_str = implode(' ', array_map(function($key, $value) {
-      return "$key=\"$value\"";
-    }, array_keys($attrs), array_values($attrs)));
+  return null;
+}
 
-    if ($is_admin) {
-      return "<span $attrs_str>{$icon->entity}</span>";
-    } else {
-      return "<i $attrs_str> </i>";
-    }
+function get_agnosticon($id, $attrs = []) {
+  $icon = get_agnosticon_data($id);
+
+  if (!$icon) {
+    return null;
+  }
+
+  $is_admin = is_admin();
+
+  if ($is_admin) {
+    $attrs = array_merge($attrs, [
+      'style' => isset($attrs['style']) ? $attrs['style'] . '; ' . $icon->style : $icon->style,
+    ]);
+  } else {
+    $attrs = array_merge($attrs, [
+      'class' => isset($attrs['class']) ? $attrs['class'] . ' ' . $icon->class : $icon->class,
+    ]);
+  }
+
+  $attrs_str = implode(' ', array_map(function($key, $value) {
+    return "$key=\"$value\"";
+  }, array_keys($attrs), array_values($attrs)));
+
+  if ($is_admin) {
+    return "<span $attrs_str>{$icon->entity}</span>";
+  } else {
+    return "<i $attrs_str> </i>";
   }
 
   return '';
