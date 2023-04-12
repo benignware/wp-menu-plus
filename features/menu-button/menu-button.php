@@ -11,7 +11,9 @@ add_action( 'wp_nav_menu_item_custom_fields', function( $item_id, $item ) {
 		return;
 	}
 
-	$button_block_type = $block_types['core/button'];
+	$has_block_editor = use_block_editor_for_post_type('post');
+	$block_types = $has_block_editor ? WP_Block_Type_Registry::get_instance()->get_all_registered() : null;
+	$button_block_type = $block_types ? $block_types['core/button'] : null;
 
 	$menu_item_button = get_post_meta( $item_id, '_menu_item_button', true );
 	$menu_item_button_background_color = get_post_meta( $item_id, '_menu_item_button_background_color', true );
@@ -50,25 +52,27 @@ add_action( 'wp_nav_menu_item_custom_fields', function( $item_id, $item ) {
 				</div>
 		
 				<!-- Style -->
-				<div style="clear: both;">
-					<label class="button-style"><?php _e( "Button Style", 'menu-item-button' ); ?></label><br />
-				
-					<div class="logged-input-holder">
-						<select
-							name="menu_item_button_style[<?php echo $item_id ;?>]"
-							id="menu-item-button-style<?php echo $item_id ;?>"
-						>
-							<?php foreach ($button_block_type->styles as ['name' => $style, 'label' => $label]): ?>
-								<option
-									value="<?= $style ?>"
-									<?php if (esc_attr( $menu_item_button_style ) === $style ): ?>selected<?php endif; ?>
-								>
-									<?= $label ?>
-								</option>
-							<?php endforeach; ?>
-						</select>
+				<?php if ($button_block_type): ?>
+					<div style="clear: both;">
+						<label class="button-style"><?php _e( "Button Style", 'menu-item-button' ); ?></label><br />
+					
+						<div class="logged-input-holder">
+							<select
+								name="menu_item_button_style[<?php echo $item_id ;?>]"
+								id="menu-item-button-style<?php echo $item_id ;?>"
+							>
+								<?php foreach ($button_block_type->styles as ['name' => $style, 'label' => $label]): ?>
+									<option
+										value="<?= $style ?>"
+										<?php if (esc_attr( $menu_item_button_style ) === $style ): ?>selected<?php endif; ?>
+									>
+										<?= $label ?>
+									</option>
+								<?php endforeach; ?>
+							</select>
+						</div>
 					</div>
-				</div>
+				<?php endif; ?>
 			</div>
 		</div>
 	</div>
