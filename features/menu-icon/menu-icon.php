@@ -84,7 +84,6 @@ add_action( 'wp_nav_menu_item_custom_fields', function( $item_id, $item ) {
 			</div>
 		</div>
 	</div>
-
 <?php
 }, 10, 2 );
 
@@ -138,7 +137,6 @@ add_filter( 'nav_menu_item_title', function($title, $item) {
 
   return $title;
 }, 10, 2);
-
 
 add_action('init', function() {
 	wp_enqueue_style(

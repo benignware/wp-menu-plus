@@ -413,27 +413,32 @@ function _agnosticon_load() {
     return;
   }
 
-  $url = admin_url( 'admin-ajax.php' ) . '?action=_agnosticon_data';
-  $url = preg_replace("~(https?)://localhost(\:\d*)?~", "$1://127.0.0.1", $url);
-
-  // $url = 'http://127.0.0.1/wp-admin/admin-ajax.php?action=theme_resources';
-
-  $response = wp_remote_get($url, [
-    'timeout' => 10
-  ]);
- 
-  if ( is_array( $response ) && ! is_wp_error( $response ) ) {
-    $content = $response['body']; // use the content
+  if (!is_admin()) {
+    $resources = _agnosticon_load_resources();
+    $data = _agnosticon_parse_resources($resources);
   } else {
-    echo 'ERROR ' . $url;
-    print_r($response);
-    exit;
-  }
+    $url = admin_url( 'admin-ajax.php' ) . '?action=_agnosticon_data';
+    $url = preg_replace("~(https?)://localhost(\:\d*)?~", "$1://127.0.0.1", $url);
 
-  if ($content) {
-    $data = json_decode($content);
-  } else {
-    $data = null;
+    // $url = 'http://127.0.0.1/wp-admin/admin-ajax.php?action=theme_resources';
+
+    $response = wp_remote_get($url, [
+      'timeout' => 10
+    ]);
+  
+    if ( is_array( $response ) && ! is_wp_error( $response ) ) {
+      $content = $response['body']; // use the content
+    } else {
+      echo 'ERROR ' . $url;
+      print_r($response);
+      exit;
+    }
+
+    if ($content) {
+      $data = json_decode($content);
+    } else {
+      $data = null;
+    }
   }
 
   $__agnosticon__ = (object) [
