@@ -38,7 +38,7 @@
           } else if (input.value && isSubmit && isSubmitLink) {
             searchForm.submit();
             event.preventDefault();
-          } else {
+          } else if (!document.activeElement) {
             searchForm.classList.add(IS_COLLAPSED);
           }
         }
