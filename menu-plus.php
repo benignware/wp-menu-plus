@@ -1,12 +1,12 @@
 <?php
 /**
- Plugin Name: Menu Plus
- Plugin URI: http://github.com/benignware/wp-menu-plus
- Description: Enhance menus with buttons and search
- Version: 1.0.0-beta.6
- Author: Rafael Nowrotek, Benignware
- Author URI: http://benignware.com
- License: MIT
+ * Plugin Name: Menu Plus
+ * Plugin URI: http://github.com/benignware/wp-menu-plus
+ * Description: Enhance menus with buttons and search
+ * Version: 1.0.0-beta.6
+ * Author: Rafael Nowrotek, Benignware
+ * Author URI: http://benignware.com
+ * License: MIT
 */
 
 require 'lib/agnosticon/agnosticon.php';
@@ -23,7 +23,7 @@ add_action('admin_enqueue_scripts', function() {
 	wp_enqueue_style( 'menu-plus-admin', plugins_url( 'menu-plus.css', __FILE__ ), [] );
 
 	$palette = get_theme_support('editor-color-palette');
-	$palette = $palette ? $palette[0] : null;
+	$palette = $palette ? $palette[0] : [];
 
 	wp_localize_script(
 		'menu-plus-admin',
