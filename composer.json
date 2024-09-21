@@ -1,6 +1,6 @@
 {
   "name": "benignware/wp-menu-plus",
-  "version": "1.0.0-beta.6",
+  "version": "1.0.0",
   "type": "wordpress-plugin",
   "license": "UNLICENSED",
   "description": "Enhance menus with buttons and search",
@@ -18,12 +18,21 @@
   "support": {
     "issues": "https://github.com/benignware/wp-menu-plus/issues"
   },
-  "config": {
-    "vendor-dir": "vendor/lib"
-  },
   "repositories": [{
     "type": "composer",
     "url": "https://wpackagist.org"
+  }, {
+    "type": "package",
+    "package": {
+      "name": "benignware/benignware-connect",
+      "version": "v1.0.1",
+      "type": "wordpress-plugin",
+      "source": {
+        "type": "git",
+        "url": "https://github.com/benignware/wp-benignware-connect.git",
+        "reference": "v1.0.1"
+      }
+    }
   }, {
     "type":"package",
     "package": {
@@ -42,6 +51,7 @@
   },
   "require-dev": {
     "wptrt/theme-unit-test": "dev-master",
+    "benignware/benignware-connect": ">=1.0.1",
     "wpackagist-plugin/block-manager": ">=1.2.4",
     "wpackagist-plugin/classic-editor": "*",
     "wpackagist-plugin/classic-menu-block": "*",
@@ -71,6 +81,12 @@
       "wp-content/themes/{$name}/": [
         "type:wordpress-theme"
       ]
+    }
+  },
+  "config": {
+    "vendor-dir": "vendor/lib",
+    "allow-plugins": {
+      "composer/installers": true
     }
   }
 }
