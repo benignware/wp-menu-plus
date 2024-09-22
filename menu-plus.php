@@ -3,19 +3,17 @@
  * Plugin Name: Menu Plus
  * Plugin URI: http://github.com/benignware/wp-menu-plus
  * Description: Enhance menus with buttons and search
- * Version: 1.0.0
+ * Version: 1.1.0
  * Author: Rafael Nowrotek, Benignware
  * Author URI: http://benignware.com
  * License: MIT
 */
 
-require 'lib/agnosticon/agnosticon.php';
+// require 'lib/agnosticon/agnosticon.php';
 
 require_once('features/menu-icon/menu-icon.php');
 require_once('features/menu-button/menu-button.php');
 require_once('features/menu-search-form/menu-search-form.php');
-
-
 
 add_action('admin_enqueue_scripts', function() {
 	wp_enqueue_style( 'wp-color-picker' );

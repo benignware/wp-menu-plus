@@ -1,6 +1,6 @@
 {
   "name": "benignware/wp-menu-plus",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "type": "wordpress-plugin",
   "license": "UNLICENSED",
   "description": "Enhance menus with buttons and search",
@@ -13,7 +13,7 @@
     }
   ],
   "keywords": [
-    "wordpress", "wordpress-plugin", "menu", "cta", "search"
+    "wordpress-plugin"
   ],
   "support": {
     "issues": "https://github.com/benignware/wp-menu-plus/issues"

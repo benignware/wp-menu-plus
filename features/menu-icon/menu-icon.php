@@ -1,6 +1,7 @@
 <?php
+namespace benignware\wp\menu_plus;
 
-
+require 'menu-icon-block.php';
 require 'menu-icon-search.php';
 
 
@@ -122,13 +123,13 @@ add_action( 'wp_update_nav_menu_item', function( $menu_id, $menu_item_db_id ) {
 	}
 }, 10, 2 );
 
-add_action( 'admin_enqueue_scripts', function() {
-  wp_enqueue_style('agnosticon');
-});
+// add_action( 'admin_enqueue_scripts', function() {
+//   wp_enqueue_style('agnosticon');
+// });
 
-add_action( 'enqueue_block_editor_assets', function() {
-  wp_enqueue_style('agnosticon');
-} );
+// add_action( 'enqueue_block_editor_assets', function() {
+//   wp_enqueue_style('agnosticon');
+// } );
 
 add_filter( 'nav_menu_item_title', function($title, $item) {
   if ( is_object( $item ) && isset( $item->ID ) ) {
@@ -158,3 +159,137 @@ add_action('init', function() {
 		plugins_url( 'menu-icon.css', __FILE__ )
 	);
 });
+
+
+function enqueue_icon_scripts() {
+  wp_enqueue_script(
+      'menuplus-icon-assets',
+      plugin_dir_url( __FILE__ ) . 'menu-icon.css',
+      filemtime( plugin_dir_path( __FILE__ ) . 'menu-icon.css' ), // Version based on file modification time
+      true // Load in footer
+  );
+}
+add_action( 'enqueue_scripts', 'benignware\wp\menu_plus\enqueue_icon_scripts' );
+
+
+function get_theme_breakpoints() {
+	// Get the theme object
+	$merged_data = \WP_Theme_JSON_Resolver::get_merged_data();
+	
+	if (method_exists($merged_data, 'get_data')) {
+		$theme_json = $merged_data->get_data();
+	} else {
+		$theme_json = $merged_data;
+	}
+
+	$theme_json = $merged_data->get_data();
+	$default_theme_json = json_decode(file_get_contents(ABSPATH . WPINC . '/theme.json'), true);
+	
+	$theme_json = array_merge(
+		$default_theme_json,
+		$theme_json,
+	);
+
+	// Check if the breakpoints setting exists
+	$breakpoints = isset($theme_json['settings']['breakpoints']) ? $theme_json['settings']['breakpoints'] : [];
+
+	// Provide default breakpoints if not set
+	$default_breakpoints = [
+		'mobile' => 600,   // max-width 600px
+		'tablet' => 900,   // max-width 900px
+		'desktop' => 1200, // min-width 1200px
+	];
+
+	// Allow filtering of breakpoints, merging theme settings with defaults
+	return apply_filters('menu_plus_breakpoints', wp_parse_args($breakpoints, $default_breakpoints));
+}
+
+function render_custom_navigation_link_block($block_content, $block) {
+    // Only modify the core/navigation-link block
+    if ($block['blockName'] !== 'core/navigation-link') {
+        return $block_content;
+    }
+
+    // Retrieve attributes
+    $attributes = $block['attrs'];
+
+    // Build classes based on the attributes
+    $classNames = 'has-icon';
+    if (!empty($attributes['hideLabelMobile'])) {
+        $classNames .= ' hide-label-mobile';
+    }
+    if (!empty($attributes['hideLabelTablet'])) {
+        $classNames .= ' hide-label-tablet';
+    }
+    if (!empty($attributes['hideLabelDesktop'])) {
+        $classNames .= ' hide-label-desktop';
+    }
+
+    // Add classes to the <a> tag
+    $block_content = preg_replace(
+        '/<a([^>]+)class="([^"]*)"/',
+        '<a$1class="$2 ' . esc_attr($classNames) . '"',
+        $block_content
+    );
+
+    return $block_content;
+}
+add_filter('render_block', 'benignware\wp\menu_plus\render_custom_navigation_link_block', 10, 2);
+
+function generate_dynamic_menu_icon_css() {
+	$breakpoints = get_theme_breakpoints(); // Retrieve the breakpoints as defined in the theme
+
+	if (!empty($breakpoints)) {
+			$css = '';
+
+			// Generate CSS for the mobile breakpoint
+			if (isset($breakpoints['mobile'])) {
+					$css .= "
+					@media (max-width: {$breakpoints['mobile']}px) {
+							.has-icon.hide-label-mobile .wp-block-navigation-item__label {
+									display: none;
+							}
+					}
+					";
+			}
+
+			// Generate CSS for the tablet breakpoint (from mobile+1 to tablet max width)
+			if (isset($breakpoints['tablet'])) {
+					$tablet_min = $breakpoints['mobile'] + 1;
+					$css .= "
+					@media (min-width: {$tablet_min}px) and (max-width: {$breakpoints['tablet']}px) {
+							.has-icon.hide-label-tablet .wp-block-navigation-item__label {
+									display: none;
+							}
+					}
+					";
+			}
+
+			// Generate CSS for the desktop breakpoint (min-width tablet+1)
+			if (isset($breakpoints['desktop'])) {
+					$desktop_min = $breakpoints['tablet'] + 1;
+					$css .= "
+					@media (min-width: {$desktop_min}px) {
+							.has-icon.hide-label-desktop .wp-block-navigation-item__label {
+									display: none;
+							}
+					}
+					";
+			}
+
+			return $css;
+	}
+}
+
+
+function enqueue_dynamic_menu_css() {
+	// Register and enqueue a placeholder style for dynamic CSS
+		wp_register_style('menuplus-dynamic-menu', false); // 'false' means no external file, it's just for inline styles.
+		wp_enqueue_style('menuplus-dynamic-menu'); // Enqueue the registered placeholder style
+
+    // Generate dynamic CSS content
+    $css = generate_dynamic_menu_icon_css();
+    // Add the generated CSS as inline styles
+    wp_add_inline_style('menuplus-dynamic-menu', $css);
+}
+add_action('wp_enqueue_scripts', 'benignware\wp\menu_plus\enqueue_dynamic_menu_css');

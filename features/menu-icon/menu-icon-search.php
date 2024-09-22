@@ -1,4 +1,7 @@
 <?php
+
+namespace benignware\wp\menu_plus;
+
 /**
  * Enqueue scripts and styles.
  *
@@ -42,4 +45,4 @@ function ja_global_enqueues() {
 		)
 	);
 }
-add_action( 'admin_enqueue_scripts', 'ja_global_enqueues' );
+add_action( 'admin_enqueue_scripts', 'benignware\wp\menu_plus\ja_global_enqueues' );
