@@ -71,9 +71,7 @@
           });
 
           that.sc.on('mousedown click', '.autocomplete-suggestion', function (e){
-            console.log('CLICK');
               var item = $(this), v = item.data('val');
-              console.log('ITEM: ', item);
               if (v || item.hasClass('autocomplete-suggestion')) { // else outside click
                   that.val(v);
                   o.onSelect(e, v, item);
