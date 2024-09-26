@@ -1,12 +1,18 @@
 <?php
 namespace benignware\wp\menu_plus;
 
+use benignware\wp\agnosticon\get_icon;
+use benignware\wp\agnosticon\get_icon_meta;
+
 require 'menu-icon-block.php';
 require 'menu-icon-search.php';
 
 
 add_action( 'wp_nav_menu_item_custom_fields', function( $item_id, $item ) {
-	
+	if (!function_exists('benignware\wp\agnosticon\get_icon_meta')) {
+		return false;
+	}
+
   // $menu_item_icon = get_post_meta( $item_id, '_menu_item_icon', true );
 	$menu_item_icon_id = get_post_meta( $item_id, '_menu_item_icon_id', true );
 	$menu_item_icon_hide_title = get_post_meta( $item_id, '_menu_item_icon_hide_title', true );
@@ -15,7 +21,7 @@ add_action( 'wp_nav_menu_item_custom_fields', function( $item_id, $item ) {
 	$is_valid = true;
 
 	if ($menu_item_icon_id) {
-		$icon = get_agnosticon($menu_item_icon_id, [
+		$icon = \benignware\wp\agnosticon\get_icon($menu_item_icon_id, [
 			'class' => 'menu-plus-icon-input-icon'
 		]);
 
@@ -90,6 +96,10 @@ add_action( 'wp_nav_menu_item_custom_fields', function( $item_id, $item ) {
 
 
 add_action( 'wp_update_nav_menu_item', function( $menu_id, $menu_item_db_id ) {
+	if (!function_exists('benignware\wp\agnosticon\get_icon_meta')) {
+		return false;
+	}
+
 	if ( isset( $_POST['menu_item_icon'][$menu_item_db_id]  ) ) {
 		$sanitized_data = filter_var($_POST['menu_item_icon'][$menu_item_db_id], FILTER_SANITIZE_NUMBER_INT);
 		update_post_meta( $menu_item_db_id, '_menu_item_icon', $sanitized_data );
@@ -106,7 +116,7 @@ add_action( 'wp_update_nav_menu_item', function( $menu_id, $menu_item_db_id ) {
 
 	if ( isset( $_POST['menu_item_icon_id'][$menu_item_db_id]  ) ) {
 		$id = sanitize_text_field( $_POST['menu_item_icon_id'][$menu_item_db_id] );
-		$icon = get_agnosticon_data($id);
+		$icon = \benignware\wp\agnosticon\get_icon_meta($id);
 
 		if ($icon) {
 			update_post_meta( $menu_item_db_id, '_menu_item_icon_class', $icon->class );
@@ -132,6 +142,10 @@ add_action( 'wp_update_nav_menu_item', function( $menu_id, $menu_item_db_id ) {
 // } );
 
 add_filter( 'nav_menu_item_title', function($title, $item) {
+	if (!function_exists('benignware\wp\agnosticon\get_icon_meta')) {
+		return $title;
+	}
+
   if ( is_object( $item ) && isset( $item->ID ) ) {
     $icon_id = get_post_meta( $item->ID, '_menu_item_icon_id', true );
 		$icon_class = get_post_meta( $item->ID, '_menu_item_icon_class', true );
@@ -139,7 +153,7 @@ add_filter( 'nav_menu_item_title', function($title, $item) {
 		if ($icon_class) {
 			$icon_html = "<i class=\"$icon_class\"></i>";
 		} else if ($icon_id) {
-      $icon_html = get_agnosticon($icon_id, [
+      $icon_html = \benignware\wp\agnosticon\get_icon($icon_id, [
 				'class' => 'menu-item-icon'
 			]);
     }
