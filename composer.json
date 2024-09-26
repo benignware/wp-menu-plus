@@ -1,6 +1,6 @@
 {
   "name": "benignware/wp-menu-plus",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "type": "wordpress-plugin",
   "license": "UNLICENSED",
   "description": "Enhance menus with buttons and search",
