@@ -144,7 +144,7 @@ const withInspectorControls = (BlockEdit) => {
                 </InspectorControls>
                 {icon && icon.entity && (
                     <i
-                        className={icon.class}
+                        // className={icon.class}
                         style={{
                             ...icon.style ? { fontFamily: icon.font_family } : {},
                             marginRight: 'calc(var(--wp--style--block-gap, 0.5em) * -1 + 0.5em)',
