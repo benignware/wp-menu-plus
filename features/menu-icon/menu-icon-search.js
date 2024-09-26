@@ -34,7 +34,7 @@ jQuery(function($){
       minChars: 2,
       source: function(term, suggest) {
         try { searchRequest.abort(); } catch(e){}
-        searchRequest = $.post(global.ajax, { search: term, action: 'agnosticon_search', dataType: "json" }, function(res) {
+        searchRequest = $.get(global.ajax, { search: term, action: 'agnosticon_search', dataType: "json" }, function(res) {
           suggest(res.data);
         });
       },
