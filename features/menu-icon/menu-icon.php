@@ -252,6 +252,8 @@ add_filter('render_block', 'benignware\wp\menu_plus\render_custom_navigation_lin
 
 function generate_dynamic_menu_icon_css() {
 	$breakpoints = get_theme_breakpoints(); // Retrieve the breakpoints as defined in the theme
+	$labelSelector = '.wp-block-navigation-item__label'; // Define the label class
+	$labelSelector = 'span';
 
 	if (!empty($breakpoints)) {
 			$css = '';
@@ -260,7 +262,7 @@ function generate_dynamic_menu_icon_css() {
 			if (isset($breakpoints['mobile'])) {
 					$css .= "
 					@media (max-width: {$breakpoints['mobile']}px) {
-							.has-icon.hide-label-mobile .wp-block-navigation-item__label {
+							.has-icon.hide-label-mobile $labelSelector {
 									display: none;
 							}
 					}
@@ -272,7 +274,7 @@ function generate_dynamic_menu_icon_css() {
 					$tablet_min = $breakpoints['mobile'] + 1;
 					$css .= "
 					@media (min-width: {$tablet_min}px) and (max-width: {$breakpoints['tablet']}px) {
-							.has-icon.hide-label-tablet .wp-block-navigation-item__label {
+							.has-icon.hide-label-tablet $labelSelector {
 									display: none;
 							}
 					}
@@ -284,7 +286,7 @@ function generate_dynamic_menu_icon_css() {
 					$desktop_min = $breakpoints['tablet'] + 1;
 					$css .= "
 					@media (min-width: {$desktop_min}px) {
-							.has-icon.hide-label-desktop .wp-block-navigation-item__label {
+							.has-icon.hide-label-desktop $labelSelector {
 									display: none;
 							}
 					}
@@ -303,6 +305,9 @@ function enqueue_dynamic_menu_css() {
 
     // Generate dynamic CSS content
     $css = generate_dynamic_menu_icon_css();
+
+		// echo $css;
+		// exit;
     // Add the generated CSS as inline styles
     wp_add_inline_style('menuplus-dynamic-menu', $css);
 }
