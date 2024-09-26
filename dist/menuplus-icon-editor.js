@@ -153,7 +153,7 @@
             hideLabelDesktop: newValue
           })
         }))), icon && icon.entity && /*#__PURE__*/React.createElement("i", {
-          className: icon.class,
+          // className={icon.class}
           style: {
             ...(icon.style ? {
               fontFamily: icon.font_family
