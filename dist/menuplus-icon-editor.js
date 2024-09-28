@@ -153,12 +153,11 @@
             hideLabelDesktop: newValue
           })
         }))), icon && icon.entity && /*#__PURE__*/React.createElement("i", {
-          // className={icon.class}
+          className: "menuplus-pagelink-icon",
           style: {
             ...(icon.style ? {
               fontFamily: icon.font_family
             } : {}),
-            marginRight: 'calc(var(--wp--style--block-gap, 0.5em) * -1 + 0.5em)',
             fontStyle: 'normal'
           },
           dangerouslySetInnerHTML: {

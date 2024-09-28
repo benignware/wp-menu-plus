@@ -6,11 +6,20 @@ function enqueue_icon_block_editor_assets() {
       'menuplus-icon-block-editor-assets',
       plugin_dir_url( __FILE__ ) . '../../dist/menuplus-icon-editor.js',
       [ 'wp-blocks', 'wp-rich-text', 'wp-element', 'wp-editor', 'wp-components' ],
-      filemtime( plugin_dir_path( __FILE__ ) . '../../dist/menuplus-icon-editor.js' ), // Version based on file modification time
-      true // Load in footer
+      filemtime( plugin_dir_path( __FILE__ ) . '../../dist/menuplus-icon-editor.js' ), 
+      true
   );
 }
 add_action( 'enqueue_block_editor_assets', 'benignware\wp\menu_plus\enqueue_icon_block_editor_assets' );
+
+function enqueue_icon_block_assets() {
+    wp_enqueue_style (
+        'menuplus-icon-block-editor-assets',
+        plugin_dir_url( __FILE__ ) . '../../dist/menuplus-icon-editor.css',
+        filemtime( plugin_dir_path( __FILE__ ) . '../../dist/menuplus-icon-editor.css' ),
+    );
+}
+add_action( 'enqueue_block_assets', 'benignware\wp\menu_plus\enqueue_icon_block_assets' );
 
 
 

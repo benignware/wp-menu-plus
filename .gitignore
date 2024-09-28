@@ -23,7 +23,4 @@ temp
 wp-config-*
 wp-config
 !wp-config-docker.php
-.plugins
-.mu-plugins
-.uploads
-.themes
+.wp

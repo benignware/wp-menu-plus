@@ -1,0 +1,3 @@
+.menuplus-pagelink-icon {
+  margin-right: calc(var(--wp--style--block-gap, 0.5em) * -1 + 0.5em)
+}

@@ -1,3 +1,5 @@
+import "./menu-icon-editor.css";
+
 const { __ } = wp.i18n;
 const { TextControl, PanelBody, ToggleControl } = wp.components;
 const { Fragment, useState } = wp.element;
@@ -144,10 +146,9 @@ const withInspectorControls = (BlockEdit) => {
                 </InspectorControls>
                 {icon && icon.entity && (
                     <i
-                        // className={icon.class}
+                        className="menuplus-pagelink-icon"
                         style={{
                             ...icon.style ? { fontFamily: icon.font_family } : {},
-                            marginRight: 'calc(var(--wp--style--block-gap, 0.5em) * -1 + 0.5em)',
                             fontStyle: 'normal',
                         }}
                         dangerouslySetInnerHTML={{ __html: icon.entity }}

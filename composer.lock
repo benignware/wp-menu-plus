@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f9fc07242f6edffa20e6489a6cbeee07",
+    "content-hash": "168071ccbc8f570a9da52940efd8242f",
     "packages": [
         {
             "name": "composer/installers",
@@ -161,11 +161,11 @@
     "packages-dev": [
         {
             "name": "benignware/benignware-connect",
-            "version": "v1.0.1",
+            "version": "v1.0.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/benignware/wp-benignware-connect.git",
-                "reference": "v1.0.1"
+                "reference": "v1.0.6"
             },
             "type": "wordpress-plugin"
         },
@@ -189,15 +189,15 @@
         },
         {
             "name": "wpackagist-plugin/classic-editor",
-            "version": "1.6.4",
+            "version": "1.6.5",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/classic-editor/",
-                "reference": "tags/1.6.4"
+                "reference": "tags/1.6.5"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/classic-editor.1.6.4.zip"
+                "url": "https://downloads.wordpress.org/plugin/classic-editor.1.6.5.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
