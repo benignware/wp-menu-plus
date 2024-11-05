@@ -25,8 +25,18 @@ add_action( 'enqueue_block_assets', 'benignware\wp\menu_plus\enqueue_icon_block_
 
 function render_navigation_link($block_content, $block) {
   if ($block['blockName'] === 'core/navigation-link') {
+    if (!isset($block['attrs']['icon'])) {
+        return $block_content;
+    }
+
+    $hide_label_class = 'is-label-hidden';
+    $is_label_hidden = isset($block['attrs']['hideLabel']) && $block['attrs']['hideLabel'];
       $icon = isset($block['attrs']['icon']) ? $block['attrs']['icon'] : [];
-      $icon_class = isset($icon['class']) ? 'agnosticon ' . esc_attr($icon['class']) : '';
+      $icon_class = isset($icon['class']) ? 'menuplus-icon agnosticon ' . esc_attr($icon['class']) : '';
+
+      if ($is_label_hidden) {
+        $icon_class.= ' ' . $hide_label_class;
+      }
 
       if ($icon_class) {
           // Use regex to find the opening <a> tag and capture existing classes

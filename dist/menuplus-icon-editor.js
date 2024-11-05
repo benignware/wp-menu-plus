@@ -33,18 +33,7 @@
             type: 'object',
             default: {}
           },
-          hideLabelMobile: {
-            // Hide label on mobile
-            type: 'boolean',
-            default: false
-          },
-          hideLabelTablet: {
-            // Hide label on tablet
-            type: 'boolean',
-            default: false
-          },
-          hideLabelDesktop: {
-            // Hide label on desktop
+          hideLabel: {
             type: 'boolean',
             default: false
           }
@@ -110,22 +99,8 @@
         } = props;
         const {
           icon,
-          hideLabelMobile,
-          hideLabelTablet,
-          hideLabelDesktop
+          hideLabel
         } = attributes;
-
-        // Build class names based on attributes
-        const labelClasses = [];
-        if (hideLabelMobile) {
-          labelClasses.push('hide-label-mobile');
-        }
-        if (hideLabelTablet) {
-          labelClasses.push('hide-label-tablet');
-        }
-        if (hideLabelDesktop) {
-          labelClasses.push('hide-label-desktop');
-        }
         return /*#__PURE__*/React.createElement(Fragment, null, /*#__PURE__*/React.createElement(InspectorControls, null, /*#__PURE__*/React.createElement(PanelBody, {
           title: __("Icon Settings", "menu-plus"),
           initialOpen: true
@@ -135,22 +110,10 @@
             icon: newIcon
           })
         }), /*#__PURE__*/React.createElement(ToggleControl, {
-          label: __("Hide Label on Mobile", "menu-plus"),
-          checked: hideLabelMobile,
+          label: __("Hide Label", "menu-plus"),
+          checked: hideLabel,
           onChange: newValue => setAttributes({
-            hideLabelMobile: newValue
-          })
-        }), /*#__PURE__*/React.createElement(ToggleControl, {
-          label: __("Hide Label on Tablet", "menu-plus"),
-          checked: hideLabelTablet,
-          onChange: newValue => setAttributes({
-            hideLabelTablet: newValue
-          })
-        }), /*#__PURE__*/React.createElement(ToggleControl, {
-          label: __("Hide Label on Desktop", "menu-plus"),
-          checked: hideLabelDesktop,
-          onChange: newValue => setAttributes({
-            hideLabelDesktop: newValue
+            hideLabel: newValue
           })
         }))), icon && icon.entity && /*#__PURE__*/React.createElement("i", {
           className: "menuplus-pagelink-icon",
@@ -163,8 +126,6 @@
           dangerouslySetInnerHTML: {
             __html: icon.entity
           }
-        }), /*#__PURE__*/React.createElement("span", {
-          className: `label ${labelClasses.join(' ')}`
         }), /*#__PURE__*/React.createElement(BlockEdit, props));
       };
     };

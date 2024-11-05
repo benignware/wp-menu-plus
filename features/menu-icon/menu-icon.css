@@ -3,29 +3,10 @@
     align-items: center;
 }
 
-
-/* :root {
-    --mobile-breakpoint: 600px;
-    --tablet-breakpoint: 900px;
-} */
-
-/* Hide the label on mobile */
-@media (max-width: var(--mobile-breakpoint)) {
-    .has-icon.hide-label-mobile .wp-block-navigation-item__label {
-        display: none;
-    }
+.menuplus-icon.is-label-hidden ~ * {
+    display: none;
 }
 
-/* Hide the label on tablet */
-@media (min-width: var(--mobile-breakpoint)) and (max-width: var(--tablet-breakpoint)) {
-    .has-icon.hide-label-tablet .wp-block-navigation-item__label {
-        display: none;
-    }
-}
-
-/* Hide the label on desktop */
-@media (min-width: var(--tablet-breakpoint)) {
-    .has-icon.hide-label-desktop .wp-block-navigation-item__label {
-        display: none;
-    }
+.is-menu-open .menuplus-icon.is-label-hidden ~ * {
+    display: inline-flex;
 }

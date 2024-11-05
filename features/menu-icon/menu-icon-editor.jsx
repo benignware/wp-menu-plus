@@ -6,6 +6,8 @@ const { Fragment, useState } = wp.element;
 const { addFilter } = wp.hooks;
 const { InspectorControls } = wp.blockEditor;
 
+const HIDE_LABEL_CLASS = 'is-label-hidden';
+
 // Add new attributes to the navigation-link block.
 const addIconAttribute = (settings) => {
     if (settings.name !== 'core/navigation-link') {
@@ -20,15 +22,7 @@ const addIconAttribute = (settings) => {
                 type: 'object',
                 default: {},
             },
-            hideLabelMobile: { // Hide label on mobile
-                type: 'boolean',
-                default: false,
-            },
-            hideLabelTablet: { // Hide label on tablet
-                type: 'boolean',
-                default: false,
-            },
-            hideLabelDesktop: { // Hide label on desktop
+            hideLabel: {
                 type: 'boolean',
                 default: false,
             },
@@ -105,18 +99,13 @@ const withInspectorControls = (BlockEdit) => {
         }
 
         const { attributes, setAttributes } = props;
-        const { icon, hideLabelMobile, hideLabelTablet, hideLabelDesktop } = attributes;
+        const { icon, hideLabel } = attributes;
 
         // Build class names based on attributes
         const labelClasses = [];
-        if (hideLabelMobile) {
-            labelClasses.push('hide-label-mobile');
-        }
-        if (hideLabelTablet) {
-            labelClasses.push('hide-label-tablet');
-        }
-        if (hideLabelDesktop) {
-            labelClasses.push('hide-label-desktop');
+
+        if (hideLabel) {
+            labelClasses.push(HIDE_LABEL_CLASS);
         }
 
         return (
@@ -128,19 +117,9 @@ const withInspectorControls = (BlockEdit) => {
                             onChange={(newIcon) => setAttributes({ icon: newIcon })}
                         />
                         <ToggleControl
-                            label={__("Hide Label on Mobile", "menu-plus")}
-                            checked={hideLabelMobile}
-                            onChange={(newValue) => setAttributes({ hideLabelMobile: newValue })}
-                        />
-                        <ToggleControl
-                            label={__("Hide Label on Tablet", "menu-plus")}
-                            checked={hideLabelTablet}
-                            onChange={(newValue) => setAttributes({ hideLabelTablet: newValue })}
-                        />
-                        <ToggleControl
-                            label={__("Hide Label on Desktop", "menu-plus")}
-                            checked={hideLabelDesktop}
-                            onChange={(newValue) => setAttributes({ hideLabelDesktop: newValue })}
+                            label={__("Hide Label", "menu-plus")}
+                            checked={hideLabel}
+                            onChange={(newValue) => setAttributes({ hideLabel: newValue })}
                         />
                     </PanelBody>
                 </InspectorControls>
@@ -154,10 +133,6 @@ const withInspectorControls = (BlockEdit) => {
                         dangerouslySetInnerHTML={{ __html: icon.entity }}
                     ></i>
                 )}
-                {/* Assuming label is a span or div for your label text */}
-                <span className={`label ${labelClasses.join(' ')}`}>
-                    {/* Your label text here */}
-                </span>
                 <BlockEdit {...props} />
             </Fragment>
         );
