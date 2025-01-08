@@ -37,12 +37,12 @@
     "type": "package",
     "package": {
       "name": "benignware/agnosticon",
-      "version": "v0.0.9",
+      "version": "v0.0.15",
       "type": "wordpress-plugin",
       "source": {
         "type": "git",
         "url": "https://github.com/benignware/wp-agnosticon",
-        "reference": "v0.0.9"
+        "reference": "v0.0.15"
       }
     }
   }, {
@@ -60,11 +60,11 @@
   "require": {
     "php": ">=5.3.0",
     "composer/installers": "~1.0",
-    "benignware/benignware-connect": ">=1.0.6",
-    "benignware/agnosticon": ">=0.0.9"
+    "benignware/benignware-connect": ">=1.0.6"
   },
   "require-dev": {
     "wptrt/theme-unit-test": "dev-master",
+    "benignware/agnosticon": ">=0.0.15",
     "wpackagist-plugin/block-manager": ">=1.2.4",
     "wpackagist-plugin/classic-editor": "*",
     "wpackagist-plugin/classic-menu-block": "*",

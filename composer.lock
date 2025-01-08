@@ -4,18 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c460900e645b9164cd8900f25066f5c0",
+    "content-hash": "cfc2448f7d1bddd9062de7adb5b5af81",
     "packages": [
-        {
-            "name": "benignware/agnosticon",
-            "version": "v0.0.9",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/benignware/wp-agnosticon",
-                "reference": "v0.0.9"
-            },
-            "type": "wordpress-plugin"
-        },
         {
             "name": "benignware/benignware-connect",
             "version": "v1.0.6",
@@ -180,6 +170,16 @@
     ],
     "packages-dev": [
         {
+            "name": "benignware/agnosticon",
+            "version": "v0.0.15",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/benignware/wp-agnosticon",
+                "reference": "v0.0.15"
+            },
+            "type": "wordpress-plugin"
+        },
+        {
             "name": "wpackagist-plugin/block-manager",
             "version": "3.1.0",
             "source": {
@@ -199,15 +199,15 @@
         },
         {
             "name": "wpackagist-plugin/classic-editor",
-            "version": "1.6.5",
+            "version": "1.6.6",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/classic-editor/",
-                "reference": "tags/1.6.5"
+                "reference": "tags/1.6.6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/classic-editor.1.6.5.zip"
+                "url": "https://downloads.wordpress.org/plugin/classic-editor.1.6.6.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -325,15 +325,15 @@
         },
         {
             "name": "wpackagist-plugin/menu-image",
-            "version": "3.11",
+            "version": "3.12",
             "source": {
                 "type": "svn",
                 "url": "https://plugins.svn.wordpress.org/menu-image/",
-                "reference": "tags/3.11"
+                "reference": "tags/3.12"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/menu-image.3.11.zip"
+                "url": "https://downloads.wordpress.org/plugin/menu-image.3.12.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -379,15 +379,15 @@
         },
         {
             "name": "wpackagist-theme/twentyseventeen",
-            "version": "3.7",
+            "version": "3.8",
             "source": {
                 "type": "svn",
                 "url": "https://themes.svn.wordpress.org/twentyseventeen/",
-                "reference": "3.7"
+                "reference": "3.8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/theme/twentyseventeen.3.7.zip"
+                "url": "https://downloads.wordpress.org/theme/twentyseventeen.3.8.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -397,15 +397,15 @@
         },
         {
             "name": "wpackagist-theme/twentytwentyone",
-            "version": "2.3",
+            "version": "2.4",
             "source": {
                 "type": "svn",
                 "url": "https://themes.svn.wordpress.org/twentytwentyone/",
-                "reference": "2.3"
+                "reference": "2.4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/theme/twentytwentyone.2.3.zip"
+                "url": "https://downloads.wordpress.org/theme/twentytwentyone.2.4.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -415,15 +415,15 @@
         },
         {
             "name": "wpackagist-theme/twentytwentythree",
-            "version": "1.5",
+            "version": "1.6",
             "source": {
                 "type": "svn",
                 "url": "https://themes.svn.wordpress.org/twentytwentythree/",
-                "reference": "1.5"
+                "reference": "1.6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/theme/twentytwentythree.1.5.zip"
+                "url": "https://downloads.wordpress.org/theme/twentytwentythree.1.6.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
@@ -433,15 +433,15 @@
         },
         {
             "name": "wpackagist-theme/twentytwentytwo",
-            "version": "1.8",
+            "version": "1.9",
             "source": {
                 "type": "svn",
                 "url": "https://themes.svn.wordpress.org/twentytwentytwo/",
-                "reference": "1.8"
+                "reference": "1.9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/theme/twentytwentytwo.1.8.zip"
+                "url": "https://downloads.wordpress.org/theme/twentytwentytwo.1.9.zip"
             },
             "require": {
                 "composer/installers": "^1.0 || ^2.0"
