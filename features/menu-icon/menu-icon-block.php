@@ -50,8 +50,9 @@ function render_navigation_link($block_content, $block) {
           $block_content = preg_replace($pattern, $replacement, $block_content);
 
           // Add the icon HTML after the opening <a> tag
+          // style="display: inline-block; margin-right: 0.4em; vertical-align: middle;"
           $icon_html = sprintf(
-              '<i class="%s" style="display: inline-block; margin-right: 0.4em; vertical-align: middle;"></i> ',
+              '<i class="%s"></i> ',
               $icon_class
           );
 
